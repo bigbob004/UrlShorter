@@ -39,5 +39,5 @@ make run_in_db
 
 
 # To do:
--запуск приложения в docker-compose
--unit-тесты
+- запуск приложения в docker-compose.
+- unit-тесты.
