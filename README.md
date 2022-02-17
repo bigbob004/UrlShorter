@@ -30,7 +30,7 @@ make run_in_memory
 make docker_and_migrate
 ```
 
-Ели docker-контейнер и миграции были применены ранне:
+Ели docker-контейнер и миграции были применены раннее:
 
 ```
 make run_in_db
