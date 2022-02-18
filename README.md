@@ -35,6 +35,9 @@ make docker_and_migrate
 docker pull postgres
 ```
 
+Если у вас нет утилиты migrate, то вам необходимо её также установить... 
+Об этом можно почитать здесь: https://github.com/golang-migrate/migrate/blob/master/cmd/migrate/README.md
+
 
 Ели docker-контейнер и миграции были применены раннее:
 
