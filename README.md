@@ -29,6 +29,12 @@ make run_in_memory
 ```
 make docker_and_migrate
 ```
+Если у вас нет образ postgres для docker, то необходимо его скачать с помощью команды:
+
+```
+docker pull postgres
+```
+
 
 Ели docker-контейнер и миграции были применены раннее:
 
