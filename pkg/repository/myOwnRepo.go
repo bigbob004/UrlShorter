@@ -19,12 +19,17 @@ func (rep MyRepo) Get(hash string) (string, error) {
 }
 
 func (rep *MyRepo) Save(longURL string) string {
-	if finded_hash, ok := rep.LongToShort[longURL]; !ok {
+	if found_hash, ok := rep.LongToShort[longURL]; !ok {
 		hash := gen.RandSeq(10)
+		_, ok = rep.ShortToLong[hash]
+		for ok {
+			hash = gen.RandSeq(10)
+			_, ok = rep.ShortToLong[hash]
+		}
 		rep.ShortToLong[hash] = longURL
 		rep.LongToShort[longURL] = hash
 		return hash
 	} else {
-		return finded_hash
+		return found_hash
 	}
 }

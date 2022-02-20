@@ -31,11 +31,18 @@ func (d *DBRepo) Search(longURL string) (string, error) {
 	}
 }
 
+//TODO обработка ошибок от БД
+
 func (d *DBRepo) Save(longURL string) string {
 	if foundHashId, err := d.Search(longURL); err == nil {
 		return foundHashId
 	} else {
 		hashID := generate.RandSeq(10)
+		_, err = d.Get(hashID)
+		for err == nil {
+			hashID = generate.RandSeq(10)
+			_, err = d.Get(hashID)
+		}
 		query := fmt.Sprintf("INSERT INTO %s (hashID, longURL) values($1, $2)", Table)
 		_, err := d.DB.Exec(query, hashID, longURL)
 		log.Print(err)
