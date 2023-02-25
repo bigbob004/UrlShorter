@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Форма получения короткой ссылки</title>
+    <link rel="stylesheet" href="res/style/style.css">
+</head>
+<body>
+<form class="url_shorter_form">
+    <h1>url shorter</h1>
+    {{if .Err}}
+    {{else}}
+    <div class="url_shorter_group" id="shorted_url">{{.Data}}</div>
+    {{end}}
+    <button class="url_shorter_group" onclick="copyFunction()">copy</button>
+</form>
+</body>
+</html>

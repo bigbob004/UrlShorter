@@ -1,10 +1,9 @@
 package main
 
 import (
-	"UrlShorter/pkg/handler"
-	"UrlShorter/pkg/repository"
-	"UrlShorter/pkg/repository/db"
-	"fmt"
+	"UrlShorter/internal/handler"
+	"UrlShorter/internal/repository"
+	"UrlShorter/internal/repository/db"
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 	"github.com/spf13/viper"
@@ -13,17 +12,7 @@ import (
 	"os"
 )
 
-var html = "<!DOCTYPE html>" +
-	"<form action=\"/create\" method=\"POST\">" +
-	"<input type=\"text\" name=\"url\" autofocus placeholder=\"URL\" required>" +
-	"<input type=\"submit\" value=\"Получить короткую ссылку\"></form>"
-
-func welcomeHandler(w http.ResponseWriter, r *http.Request) {
-	_, err := fmt.Fprint(w, html)
-	if err != nil {
-		return
-	}
-}
+const pathOfForm = "forms/short_url_form.html"
 
 func main() {
 
@@ -40,11 +29,16 @@ func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/create", h.CreateShortUrl).Methods("POST")
 	router.HandleFunc("/{hash}", h.GetOgUrl).Methods("GET")
-	router.HandleFunc("/", welcomeHandler)
+	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, pathOfForm)
+	})
+	fileServer := http.FileServer(http.Dir("./forms"))
+	router.PathPrefix("/res/").Handler(http.StripPrefix("/res/", fileServer))
+	http.Handle("/", router)
 
 	if os.Args[1] == "-InMemory" {
 		log.Print("Запуск через встроенное хранилище")
-		h.Handler = &repository.MyRepo{ShortToLong: map[string]string{},
+		h.Serivce = &repository.MyRepo{ShortToLong: map[string]string{},
 			LongToShort: map[string]string{}}
 	}
 
@@ -63,7 +57,7 @@ func main() {
 			log.Fatalf("failed to initialize db: %s", err.Error())
 		}
 
-		h.Handler = &db.DBRepo{DB: database}
+		h.Serivce = &db.DBRepo{DB: database}
 
 	}
 	log.Print("http://localhost:8080")

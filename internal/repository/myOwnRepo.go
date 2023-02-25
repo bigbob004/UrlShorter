@@ -1,7 +1,7 @@
 package repository
 
 import (
-	gen "UrlShorter/pkg/generate"
+	gen "UrlShorter/pkg"
 	"errors"
 )
 
