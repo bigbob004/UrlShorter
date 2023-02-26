@@ -9,10 +9,24 @@
 <form class="url_shorter_form">
     <h1>url shorter</h1>
     {{if .Err}}
+    <div class="url_shorter_group_errors">Bad short URL!</div>
     {{else}}
-    <div class="url_shorter_group" id="shorted_url">{{.Data}}</div>
+    <input class="url_shorter_group" id="shorted_url" placeholder= {{.Data}} readonly>
+    <button class="url_shorter_group" onclick="copyFunction()" id="copy_button" type="button">copy</button>
+    <script>
+        function copyFunction() {
+            var copyText = document.getElementById("shorted_url").placeholder;
+            navigator.clipboard
+                .writeText(copyText)
+                .then(() => {
+                    alert("successfully copied");
+                })
+                .catch(() => {
+                    alert("something went wrong");
+                });
+    }
+    </script>
     {{end}}
-    <button class="url_shorter_group" onclick="copyFunction()">copy</button>
 </form>
 </body>
 </html>

@@ -14,7 +14,7 @@ type Hnd struct {
 }
 
 type ViewData struct {
-	Err  error
+	Err  bool
 	Data string
 }
 
@@ -44,12 +44,19 @@ func (s *Hnd) CreateShortUrl(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Hnd) GetOgUrl(w http.ResponseWriter, r *http.Request) {
+	tmpl, err := template.ParseFiles("./forms/shorted_url_form.html")
+	if err != nil {
+		log.Panicf("/GetOgUrl, err: %s", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 	params := mux.Vars(r)
 	longURL, err := s.Serivce.Get(params["hash"])
 	//fmt.Fprintf(w, "OG url : "+longURL)
 
 	if err != nil {
-		fmt.Fprintf(w, "Bad short url")
+		tmpl.Execute(w, ViewData{
+			Err: true,
+		})
 	} else {
 		http.Redirect(w, r, longURL, 301)
 	}
