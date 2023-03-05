@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <title>Форма получения короткой ссылки</title>
     <link rel="stylesheet" href="res/style/style.css">
+    <script type="text/javascript" src="res/create_short_url.js"></script>
 </head>
 <body>
-<form class="url_shorter_form" method="POST" action="http://localhost:8080/create">
+<form class="url_shorter_form" method="POST">
     <h1>url shorter</h1>
-    <input class="url_shorter_group" type="text" name="url" autofocus placeholder="URL" required autocomplete="off">
-    <input class="url_shorter_group" type="submit" value="get">
+    <input class="url_shorter_group" type="text" name="url" autofocus placeholder="URL" required autocomplete="off" id="input_og_url">
+    <input class="url_shorter_group" type="button" value="get" onclick="create_short_url()">
 </form>
 </body>
 </html>

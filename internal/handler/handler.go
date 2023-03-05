@@ -2,6 +2,7 @@ package handler
 
 import (
 	"UrlShorter/internal/service"
+	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
 	"html/template"
@@ -18,6 +19,10 @@ type ViewData struct {
 	Data string
 }
 
+type data struct {
+	Url string `json:"url"`
+}
+
 func (s *Hnd) CreateShortUrl(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
@@ -29,7 +34,11 @@ func (s *Hnd) CreateShortUrl(w http.ResponseWriter, r *http.Request) {
 		log.Panicf("/CreateShortUrl, err: %s", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	longURL := r.FormValue("url")
+	var d data
+	if err := json.NewDecoder(r.Body).Decode(&d); err != nil {
+		fmt.Print(err)
+	}
+	longURL := d.Url
 	if _, err := http.Get(longURL); err != nil {
 		log.Printf("/CreateShortUrl, err: %s", err)
 		//TODO: обработка ошибок на форме
